@@ -1,7 +1,7 @@
-package com.example.demo.controller;
+package com.example.user.controller;
 
-import com.example.demo.domain.entity.user.User;
-import com.example.demo.service.UserService;
+import com.example.user.domain.entity.user.User;
+import com.example.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

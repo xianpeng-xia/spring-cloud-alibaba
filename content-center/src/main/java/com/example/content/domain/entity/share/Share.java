@@ -1,4 +1,4 @@
-package com.example.demo.domain.entity.share;
+package com.example.content.domain.entity.share;
 
 import java.util.Date;
 import javax.persistence.*;

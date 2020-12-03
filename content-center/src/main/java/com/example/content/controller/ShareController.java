@@ -1,7 +1,7 @@
-package com.example.demo.controller;
+package com.example.content.controller;
 
-import com.example.demo.domain.dto.ShareDTO;
-import com.example.demo.service.ShareService;
+import com.example.content.domain.dto.ShareDTO;
+import com.example.content.service.ShareService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -1,4 +1,4 @@
-package com.example.demo.domain.entity.user;
+package com.example.user.domain.entity.user;
 
 import java.util.Date;
 import javax.persistence.*;
