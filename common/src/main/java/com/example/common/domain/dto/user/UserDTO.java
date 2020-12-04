@@ -1,9 +1,6 @@
 package com.example.common.domain.dto.user;
 
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import lombok.Data;
 
 /**
