@@ -1,5 +1,6 @@
 package com.example.user.controller;
 
+import com.example.common.domain.dto.user.UserDTO;
 import com.example.user.domain.entity.user.User;
 import com.example.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,7 @@ public class UserController {
     UserService userService;
 
     @GetMapping("/{id}")
-    public User findById(@PathVariable Integer id) {
+    public UserDTO findById(@PathVariable Integer id) {
         log.info("我被请求了...");
         return this.userService.findById(id);
     }

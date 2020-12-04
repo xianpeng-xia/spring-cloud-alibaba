@@ -12,7 +12,7 @@
   <groupId>com.example</groupId>
   <artifactId>spring-boot-alibaba</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>Spring Cloud Alibaba</name>
+  <name>spring cloud alibaba</name>
   <packaging>pom</packaging>
   <description>Demo project for Spring Cloud Alibaba</description>
 
