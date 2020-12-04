@@ -1,6 +1,6 @@
 package com.example.content.controller;
 
-import com.example.content.domain.dto.ShareDTO;
+import com.example.common.domain.dto.content.ShareDTO;
 import com.example.content.service.ShareService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +20,7 @@ public class ShareController {
     ShareService shareService;
 
     @GetMapping("{id}")
-    public ShareDTO finfById(@PathVariable Integer id) {
+    public ShareDTO findById(@PathVariable Integer id) {
         return shareService.findById(id);
     }
 }

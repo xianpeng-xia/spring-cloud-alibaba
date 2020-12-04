@@ -1,7 +1,7 @@
 package com.example.content.service;
 
+import com.example.common.domain.dto.content.ShareDTO;
 import com.example.content.dao.share.ShareMapper;
-import com.example.content.domain.dto.ShareDTO;
 import com.example.content.domain.entity.share.Share;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

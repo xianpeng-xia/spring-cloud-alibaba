@@ -1,4 +1,4 @@
-package com.example.content.domain.dto;
+package com.example.common.domain.dto.content;
 
 import java.util.Date;
 import lombok.Data;
