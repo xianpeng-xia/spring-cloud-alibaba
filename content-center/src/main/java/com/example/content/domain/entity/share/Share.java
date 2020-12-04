@@ -18,13 +18,13 @@ public class Share {
     @Column(name = "user_id")
     private Integer userId;
 
-    private Integer title;
+    private String title;
 
     @Column(name = "create_time")
     private Date createTime;
 
     @Column(name = "update_time")
-    private Integer updateTime;
+    private Date updateTime;
 
     @Column(name = "is_original")
     private Byte isOriginal;
