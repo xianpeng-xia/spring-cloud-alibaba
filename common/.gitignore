@@ -32,7 +32,6 @@ build/
 ### VS Code ###
 .vscode/
 .mvn
-user-center.iml
 HELP.md
 mvnw
 mvnw.cmd

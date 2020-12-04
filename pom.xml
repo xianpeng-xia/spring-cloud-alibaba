@@ -19,6 +19,7 @@
   <modules>
     <module>user-center</module>
     <module>content-center</module>
+    <module>common</module>
   </modules>
 
   <properties>
