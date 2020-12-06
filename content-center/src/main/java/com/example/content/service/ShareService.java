@@ -35,10 +35,10 @@ public class ShareService {
         Share share = this.shareMapper.selectByPrimaryKey(id);
         // 发布人id
         Integer userId = share.getUserId();
-        List<ServiceInstance> instances = discoveryClient.getInstances("user-center");
-        String targetURL = instances.stream().map(instance -> instance.getUri() + "/user/" + userId)
-            .findFirst().orElseThrow(() -> new IllegalArgumentException("No instance"));
-        log.info("Target url : {}", targetURL);
+        // String targetUrl = getUserCenterTargetUrl(userId);
+        //  通过ribbon配置负载均衡获得地址
+        String targetURL = "http://user-center/user/" + userId;
+
         UserDTO user = restTemplate.getForObject(targetURL, UserDTO.class);
         ShareDTO shareDTO = new ShareDTO();
         // 消息的装配
@@ -51,5 +51,19 @@ public class ShareService {
         RestTemplate restTemplate = new RestTemplate();
         UserDTO user = restTemplate.getForObject("http://localhost:8080/user/1", UserDTO.class);
         log.info("{}", user);
+    }
+
+    /**
+     * @param userId userId
+     * @return 服务的真实url
+     *
+     * 使用discoveryClient获取服务地址
+     */
+    private String getUserCenterTargetUrl(Integer userId) {
+        List<ServiceInstance> instances = discoveryClient.getInstances("user-center");
+        String targetURL = instances.stream().map(instance -> instance.getUri() + "/user/" + userId)
+            .findFirst().orElseThrow(() -> new IllegalArgumentException("No instance"));
+        log.info("Target url : {}", targetURL);
+        return targetURL;
     }
 }
