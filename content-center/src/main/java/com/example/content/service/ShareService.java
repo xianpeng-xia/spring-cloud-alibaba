@@ -4,9 +4,12 @@ import com.example.common.domain.dto.content.ShareDTO;
 import com.example.common.domain.dto.user.UserDTO;
 import com.example.content.dao.share.ShareMapper;
 import com.example.content.domain.entity.share.Share;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,6 +25,9 @@ public class ShareService {
     private ShareMapper shareMapper;
 
     @Autowired
+    DiscoveryClient discoveryClient;
+
+    @Autowired
     RestTemplate restTemplate;
 
     public ShareDTO findById(Integer id) {
@@ -29,8 +35,11 @@ public class ShareService {
         Share share = this.shareMapper.selectByPrimaryKey(id);
         // 发布人id
         Integer userId = share.getUserId();
-        UserDTO user = restTemplate.getForObject("http://localhost:8080/user/" + userId, UserDTO.class);
-
+        List<ServiceInstance> instances = discoveryClient.getInstances("user-center");
+        String targetURL = instances.stream().map(instance -> instance.getUri() + "/user/" + userId)
+            .findFirst().orElseThrow(() -> new IllegalArgumentException("No instance"));
+        log.info("Target url : {}", targetURL);
+        UserDTO user = restTemplate.getForObject(targetURL, UserDTO.class);
         ShareDTO shareDTO = new ShareDTO();
         // 消息的装配
         BeanUtils.copyProperties(share, shareDTO);
