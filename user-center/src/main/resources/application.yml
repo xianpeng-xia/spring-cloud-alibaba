@@ -13,6 +13,12 @@ spring:
     nacos:
       discovery:
         server-addr: localhost:8848
-
+        # 命令空间
+        namespace: 23be7023-3d9e-4a15-bc92-db83448d831d
+        # 集群
+        cluster-name: BJ
+        metadata:
+          instance: a
+          version: v1
   application:
     name: user-center
