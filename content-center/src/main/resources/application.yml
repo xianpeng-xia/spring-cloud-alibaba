@@ -13,13 +13,14 @@ spring:
     nacos:
       discovery:
         server-addr: localhost:8848
+        cluster-name: BJ
 
   application:
     name: content-center
 
 user-center:
   ribbon:
-    NFLoadBalancerRuleClassName: com.example.content.configuration.NacosWeightedRule
+    NFLoadBalancerRuleClassName: com.example.content.configuration.NacosSameClusterWeightedRule
 
 ribbon:
   eager-load:
