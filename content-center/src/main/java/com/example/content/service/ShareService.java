@@ -4,8 +4,10 @@ import com.example.common.domain.dto.content.ShareDTO;
 import com.example.common.domain.dto.user.UserDTO;
 import com.example.content.dao.share.ShareMapper;
 import com.example.content.domain.entity.share.Share;
+import com.example.content.feign.client.UserCenterFeignClient;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
@@ -28,6 +30,9 @@ public class ShareService {
     DiscoveryClient discoveryClient;
 
     @Autowired
+    UserCenterFeignClient userCenterFeignClient;
+
+    @Autowired
     RestTemplate restTemplate;
 
     public ShareDTO findById(Integer id) {
@@ -35,11 +40,12 @@ public class ShareService {
         Share share = this.shareMapper.selectByPrimaryKey(id);
         // 发布人id
         Integer userId = share.getUserId();
-        // String targetUrl = getUserCenterTargetUrl(userId);
-        //  通过ribbon配置负载均衡获得地址
-        String targetURL = "http://user-center/user/" + userId;
-
-        UserDTO user = restTemplate.getForObject(targetURL, UserDTO.class);
+        // 第一种方式：通过DiscoveryClient调用
+        // UserDTO user = getUserByDiscoveryClient(userId);
+        // 第二种方式：通过ribbon配置负载均衡获得
+        // UserDTO user = getUserByRibbon(userId);
+        // 第三种方式：feign
+        UserDTO user = userCenterFeignClient.findById(userId);
         ShareDTO shareDTO = new ShareDTO();
         // 消息的装配
         BeanUtils.copyProperties(share, shareDTO);
@@ -56,14 +62,24 @@ public class ShareService {
     /**
      * @param userId userId
      * @return 服务的真实url
-     *
-     * 使用discoveryClient获取服务地址
+     * 使用discoveryClient调用远程服务
      */
-    private String getUserCenterTargetUrl(Integer userId) {
+    private UserDTO getUserByDiscoveryClient(Integer userId) {
         List<ServiceInstance> instances = discoveryClient.getInstances("user-center");
         String targetURL = instances.stream().map(instance -> instance.getUri() + "/user/" + userId)
             .findFirst().orElseThrow(() -> new IllegalArgumentException("No instance"));
         log.info("Target url : {}", targetURL);
-        return targetURL;
+        UserDTO user = restTemplate.getForObject(targetURL, UserDTO.class);
+        return user;
+    }
+
+    /**
+     * @param userId userId
+     * @return 使用Ribbon负载均衡调用远程服务
+     */
+    private UserDTO getUserByRibbon(Integer userId) {
+        String targetURL = "http://user-center/user/" + userId;
+        UserDTO user = restTemplate.getForObject(targetURL, UserDTO.class);
+        return user;
     }
 }
