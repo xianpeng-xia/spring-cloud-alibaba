@@ -19,7 +19,7 @@ spring:
 
 user-center:
   ribbon:
-    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
+    NFLoadBalancerRuleClassName: com.example.content.configuration.NacosWeightedRule
 
 ribbon:
   eager-load:
