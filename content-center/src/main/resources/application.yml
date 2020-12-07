@@ -29,3 +29,14 @@ ribbon:
   eager-load:
     clients: user-center
     enabled: true
+
+logging:
+  level:
+    com.example.content.feign.client.UserCenterFeignClient: debug
+
+feign:
+  client:
+    config:
+      # 想要调用的微服务名称
+      user-center:
+        loggerLevel: full

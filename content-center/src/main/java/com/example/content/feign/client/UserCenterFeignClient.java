@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  * on 2020/12/6 下午11:31
  */
 @FeignClient(name = "user-center")
-public interface UserCenterFeignClient {
+    public interface UserCenterFeignClient {
 
     // http://user-center/user/{id}
     @GetMapping("/user/{id}")
