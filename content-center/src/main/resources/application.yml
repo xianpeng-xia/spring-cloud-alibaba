@@ -37,6 +37,8 @@ logging:
 feign:
   client:
     config:
-      # 想要调用的微服务名称
-      user-center:
+      default:
         loggerLevel: full
+      # 想要调用的微服务名称
+      #user-center:
+      #  loggerLevel: full
