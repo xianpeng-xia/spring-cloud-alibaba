@@ -10,6 +10,7 @@ spring:
       driver-class-name: com.mysql.cj.jdbc.Driver
 
   cloud:
+    # nacos
     nacos:
       discovery:
         server-addr: localhost:8848
@@ -17,10 +18,15 @@ spring:
         metadata:
           version: v1
           targetVersion: v1
+    # sentinel
+    sentinel:
+      transport:
+        # 控制台地址
+        dashboard: localhost:8090
 
   application:
     name: content-center
-
+#ribbon
 user-center:
   ribbon:
     NFLoadBalancerRuleClassName: com.example.content.configuration.NacosFinalRule
@@ -33,13 +39,13 @@ ribbon:
 logging:
   level:
     com.example.content.feign.client.UserCenterFeignClient: debug
-
+#feign
 feign:
   client:
     config:
       # 全局
       default:
-        loggerLevel: full
+        loggerLevel: BASIC
       # 想要调用的微服务名称
       #user-center:
       #  loggerLevel: full
@@ -50,6 +56,7 @@ feign:
     max-connections: 200
     # 单个路径最大连接数
     max-connections-per-route: 50
+    connection-timeout: 10000
 
 management:
   endpoints:
