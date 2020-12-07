@@ -37,8 +37,16 @@ logging:
 feign:
   client:
     config:
+      # 全局
       default:
         loggerLevel: full
       # 想要调用的微服务名称
       #user-center:
       #  loggerLevel: full
+  httpclient:
+    #使用http client做请求
+    enabled: true
+    # 最大连接数
+    max-connections: 200
+    # 单个路径最大连接数
+    max-connections-per-route: 50
