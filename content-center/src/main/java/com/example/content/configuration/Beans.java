@@ -1,5 +1,6 @@
 package com.example.content.configuration;
 
+import com.alibaba.cloud.sentinel.annotation.SentinelRestTemplate;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ public class Beans {
 
     @Bean
     @LoadBalanced
+    @SentinelRestTemplate
     RestTemplate restTemplate() {
         return new RestTemplate();
     }
