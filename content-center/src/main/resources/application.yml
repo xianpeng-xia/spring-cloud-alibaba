@@ -47,6 +47,8 @@ logging:
     com.example.content.feign.client.UserCenterFeignClient: debug
 #feign
 feign:
+  sentinel:
+    enabled: true
   client:
     config:
       # 全局
@@ -73,4 +75,4 @@ management:
 resttemplate:
   sentinel:
     # SentinelRestTemplate开关
-    enabled: true
+    enabled: false
