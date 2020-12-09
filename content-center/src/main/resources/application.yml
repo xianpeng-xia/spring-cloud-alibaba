@@ -23,6 +23,12 @@ spring:
       transport:
         # 控制台地址
         dashboard: localhost:8090
+        # 指定与控制台通信的ip
+        client-ip: 127.0.0.1
+        # 指定与控制台通信的端口，不设置从8719扫描找到一个未占用的端口
+        port: 8719
+        # 心跳
+        heartbeat-interval-ms: 10000
 
   application:
     name: content-center
