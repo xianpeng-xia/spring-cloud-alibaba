@@ -1,5 +1,6 @@
 package com.example.content.service;
 
+import com.example.common.domain.dto.content.ShareAuditDTO;
 import com.example.common.domain.dto.content.ShareDTO;
 import com.example.common.domain.dto.user.UserDTO;
 import com.example.content.dao.share.ShareMapper;
@@ -7,12 +8,15 @@ import com.example.content.domain.entity.share.Share;
 import com.example.content.feign.client.UserCenterFeignClient;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -51,6 +55,23 @@ public class ShareService {
         BeanUtils.copyProperties(share, shareDTO);
         shareDTO.setWxNickname(user.getUsername());
         return shareDTO;
+    }
+
+
+    public Share auditShare(Integer id, ShareAuditDTO dto) {
+        Share share = shareMapper.selectByPrimaryKey(id);
+        if (share == null) {
+            throw new IllegalArgumentException("No such share");
+        }
+        if (ObjectUtils.notEqual("NOT_YET", share.getAuditStatus())) {
+            throw new IllegalArgumentException("Has been passed or rejected");
+        }
+        share.setAuditStatus(dto.getAuditStatus().name());
+        share.setReason(dto.getReason());
+        shareMapper.updateByPrimaryKey(share);
+
+        // 加积分异步执行
+        return share;
     }
 
     public static void main(String[] args) {
