@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.PathVariable;
  * @author xianpeng.xia
  * on 2020/12/6 下午11:31
  */
-@FeignClient(name = "user-center",
-    //fallback = UserCenterFeignClientFallback.class,
-    fallbackFactory = UserCenterFeignClientFallbackFactory.class)
+@FeignClient(name = "user-center"
+    // ,fallback = UserCenterFeignClientFallback.class
+    , fallbackFactory = UserCenterFeignClientFallbackFactory.class
+)
 public interface UserCenterFeignClient {
 
     // http://user-center/user/{id}

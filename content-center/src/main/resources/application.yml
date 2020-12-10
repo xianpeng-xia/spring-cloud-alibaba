@@ -20,6 +20,8 @@ spring:
           targetVersion: v1
     # sentinel
     sentinel:
+      filter:
+        enabled: true
       transport:
         # 控制台地址
         dashboard: localhost:8090
