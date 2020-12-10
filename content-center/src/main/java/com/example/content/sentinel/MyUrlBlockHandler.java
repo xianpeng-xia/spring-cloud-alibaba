@@ -1,6 +1,7 @@
 package com.example.content.sentinel;
 
 import com.alibaba.csp.sentinel.adapter.servlet.callback.UrlBlockHandler;
+import com.alibaba.csp.sentinel.adapter.spring.webmvc.callback.BlockExceptionHandler;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.alibaba.csp.sentinel.slots.block.authority.AuthorityException;
 import com.alibaba.csp.sentinel.slots.block.degrade.DegradeException;
@@ -23,10 +24,10 @@ import org.springframework.stereotype.Component;
  * 错误页
  */
 @Component
-public class MyUrlBlockHandler implements UrlBlockHandler {
+public class MyUrlBlockHandler implements BlockExceptionHandler {
 
     @Override
-    public void blocked(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, BlockException e) throws IOException {
+    public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, BlockException e) throws Exception {
         ErrorMsg errorMsg = null;
         if (e instanceof AuthorityException) {
             errorMsg = ErrorMsg.builder().status(100).msg("AuthorityException").build();
@@ -46,7 +47,6 @@ public class MyUrlBlockHandler implements UrlBlockHandler {
         httpServletResponse.setContentType("application/json;charset=UTF-8");
 
         new ObjectMapper().writeValue(httpServletResponse.getWriter(), errorMsg);
-
     }
 }
 
