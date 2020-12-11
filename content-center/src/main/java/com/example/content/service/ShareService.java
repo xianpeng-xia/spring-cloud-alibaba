@@ -2,6 +2,7 @@ package com.example.content.service;
 
 import com.example.common.domain.dto.content.ShareAuditDTO;
 import com.example.common.domain.dto.content.ShareDTO;
+import com.example.common.domain.dto.message.UserAddBonusMsg;
 import com.example.common.domain.dto.user.UserDTO;
 import com.example.content.dao.share.ShareMapper;
 import com.example.content.domain.entity.share.Share;
@@ -9,6 +10,7 @@ import com.example.content.feign.client.UserCenterFeignClient;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,9 @@ public class ShareService {
 
     @Autowired
     RestTemplate restTemplate;
+
+    @Autowired
+    RocketMQTemplate rocketMQTemplate;
 
     public ShareDTO findById(Integer id) {
         // 获取分享详情
@@ -71,6 +76,9 @@ public class ShareService {
         shareMapper.updateByPrimaryKey(share);
 
         // 加积分异步执行
+        UserAddBonusMsg userAddBonusMsg = UserAddBonusMsg.builder().userId(share.getUserId()).bonus(50).build();
+        rocketMQTemplate.convertAndSend("add-bonus", userAddBonusMsg);
+
         return share;
     }
 
