@@ -11,4 +11,15 @@ create table user_center.user
 );
 
 
+create table user_center.bonus_event_log
+(
+	id int auto_increment
+		primary key,
+	user_id int null,
+	value int null,
+	event varchar(128) null,
+	create_time int null,
+	description varchar(512) null
+);
+
 
