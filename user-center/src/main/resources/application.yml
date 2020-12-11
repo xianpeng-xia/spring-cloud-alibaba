@@ -22,3 +22,8 @@ spring:
           version: v1
   application:
     name: user-center
+
+rocketmq:
+  name-server: localhost:9876
+  producer:
+    group: test-group
