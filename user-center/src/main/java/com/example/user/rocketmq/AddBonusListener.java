@@ -1,10 +1,14 @@
 package com.example.user.rocketmq;
 
 import com.example.common.domain.dto.message.UserAddBonusMsg;
+import com.example.user.dao.user.BonusEventLogMapper;
 import com.example.user.dao.user.UserMapper;
+import com.example.user.domain.entity.user.BonusEventLog;
+import com.example.user.domain.entity.user.User;
+import java.util.Date;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,14 +17,23 @@ import org.springframework.stereotype.Service;
  * @time 下午8:13
  */
 @Service
+@Slf4j
 @RocketMQMessageListener(consumerGroup = "consumer-group", topic = "add-bonus")
 public class AddBonusListener implements RocketMQListener<UserAddBonusMsg> {
 
     @Autowired
     UserMapper userMapper;
 
-    @Override
-    public void onMessage(UserAddBonusMsg userAddBonusMsg) {
+    @Autowired
+    BonusEventLogMapper bonusEventLogMapper;
 
+    @Override
+    public void onMessage(UserAddBonusMsg msg) {
+        User user = userMapper.selectByPrimaryKey(msg.getUserId());
+        user.setBonus(user.getBonus() + msg.getBonus());
+        userMapper.updateByPrimaryKeySelective(user);
+
+        BonusEventLog bonusEventLog = BonusEventLog.builder().userId(msg.getUserId()).value(msg.getBonus()).event("CONTRIBUTE").createTime(new Date()).description("投稿").build();
+        bonusEventLogMapper.insert(bonusEventLog);
     }
 }

@@ -22,15 +22,15 @@
         </jdbcConnection>
 
         <!--实体-->
-        <javaModelGenerator targetPackage="com.example.demo.domain.entity.${moduleName}"
+        <javaModelGenerator targetPackage="com.example.user.domain.entity.${moduleName}"
                             targetProject="src/main/java"/>
 
         <!--mapper.xml-->
-        <sqlMapGenerator targetPackage="com.example.demo.dao.${moduleName}"
+        <sqlMapGenerator targetPackage="com.example.user.dao.${moduleName}"
                          targetProject="src/main/resources"/>
 
         <!--mapper接口-->
-        <javaClientGenerator targetPackage="com.example.demo.dao.${moduleName}"
+        <javaClientGenerator targetPackage="com.example.user.dao.${moduleName}"
                              targetProject="src/main/java"
                              type="XMLMAPPER"/>
 

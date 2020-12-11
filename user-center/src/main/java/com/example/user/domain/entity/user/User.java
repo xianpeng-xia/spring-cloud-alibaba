@@ -11,6 +11,7 @@ import lombok.ToString;
 @ToString
 @Table(name = "user")
 public class User {
+
     @Id
     @GeneratedValue(generator = "JDBC")
     private Integer id;
@@ -36,4 +37,5 @@ public class User {
      */
     @Column(name = "update_time")
     private Date updateTime;
+    private Integer bonus;
 }
