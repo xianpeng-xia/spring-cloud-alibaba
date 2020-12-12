@@ -29,6 +29,10 @@ spring:
           # 用来指定topic
           destination:  stream-test-topic
           group: binder-group
+        my-input:
+          # 用来指定topic
+          destination:  stream-my-topic
+          group: my-group
   application:
     name: user-center
 

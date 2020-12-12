@@ -3,6 +3,7 @@ package com.example.content.controller;
 import com.alibaba.cloud.sentinel.annotation.SentinelRestTemplate;
 import com.alibaba.fastjson.JSON;
 import com.example.common.domain.dto.user.UserDTO;
+import com.example.content.rocketmq.MySource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.messaging.Message;
@@ -27,6 +28,9 @@ public class TestController {
     @Autowired
     Source source;
 
+    @Autowired
+    MySource mySource;
+
     @GetMapping("/sentinel-rest-template/{userId}")
     public UserDTO sentinelRestTemplate(@PathVariable Integer userId) {
         UserDTO user = restTemplate.getForObject("http://user-center/user/{userId}", UserDTO.class, userId);
@@ -37,6 +41,14 @@ public class TestController {
     public String streamTest() {
         Message<String> message = MessageBuilder.withPayload("消息体").build();
         boolean result = source.output().send(message);
+        return "success";
+    }
+
+
+    @GetMapping("/my/stream")
+    public String myStreamTest() {
+        Message<String> message = MessageBuilder.withPayload("Hello~~~").build();
+        boolean result = mySource.output().send(message);
         return "success";
     }
 }

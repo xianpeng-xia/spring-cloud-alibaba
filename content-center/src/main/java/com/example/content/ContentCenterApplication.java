@@ -1,5 +1,6 @@
 package com.example.content;
 
+import com.example.content.rocketmq.MySource;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -12,7 +13,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 @MapperScan("com.example.content.dao")
 // 可以不加 @EnableDiscoveryClient
 @EnableFeignClients
-@EnableBinding(Source.class)
+@EnableBinding({Source.class, MySource.class})
 public class ContentCenterApplication {
 
     public static void main(String[] args) {
