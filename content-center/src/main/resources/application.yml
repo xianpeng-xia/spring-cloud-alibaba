@@ -31,6 +31,15 @@ spring:
         port: 8719
         # 心跳
         heartbeat-interval-ms: 10000
+    stream:
+      rocketmq:
+        binder:
+          name-server: 127.0.0.1:9876
+      bindings:
+        output:
+          # 用来指定topic
+          destination:  stream-test-topic
+
 
   application:
     name: content-center
