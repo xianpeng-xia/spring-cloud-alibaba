@@ -21,3 +21,13 @@ create table content_center.share
 	reason varchar(128) null
 );
 
+create table content_center.rocketmq_transaction_log
+(
+	id int auto_increment
+		primary key,
+	transaction_id varchar(128) null,
+	log varchar(64) null
+);
+
+
+
