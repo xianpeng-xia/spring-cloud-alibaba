@@ -4,20 +4,27 @@ import com.example.common.domain.dto.content.ShareAuditDTO;
 import com.example.common.domain.dto.content.ShareDTO;
 import com.example.common.domain.dto.message.UserAddBonusMsg;
 import com.example.common.domain.dto.user.UserDTO;
+import com.example.common.enums.AuditStatusEnum;
 import com.example.content.dao.share.ShareMapper;
+import com.example.content.dao.transaction.RocketmqTransactionLogMapper;
 import com.example.content.domain.entity.share.Share;
+import com.example.content.domain.entity.transaction.RocketmqTransactionLog;
 import com.example.content.feign.client.UserCenterFeignClient;
 import java.util.List;
+import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
+import org.apache.rocketmq.spring.support.RocketMQHeaders;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 
@@ -43,6 +50,9 @@ public class ShareService {
 
     @Autowired
     RocketMQTemplate rocketMQTemplate;
+
+    @Autowired
+    RocketmqTransactionLogMapper rocketmqTransactionLogMapper;
 
     public ShareDTO findById(Integer id) {
         // 获取分享详情
@@ -71,15 +81,38 @@ public class ShareService {
         if (ObjectUtils.notEqual("NOT_YET", share.getAuditStatus())) {
             throw new IllegalArgumentException("Has been passed or rejected");
         }
-        share.setAuditStatus(dto.getAuditStatus().name());
-        share.setReason(dto.getReason());
-        shareMapper.updateByPrimaryKey(share);
-
-        // 加积分异步执行
-        UserAddBonusMsg userAddBonusMsg = UserAddBonusMsg.builder().userId(share.getUserId()).bonus(50).build();
-        rocketMQTemplate.convertAndSend("add-bonus", userAddBonusMsg);
+        // 如果通过加积分,异步执行
+        if (dto.getAuditStatus().equals(AuditStatusEnum.PASS)) {
+            String transactionId = UUID.randomUUID().toString();
+            UserAddBonusMsg userAddBonusMsg = UserAddBonusMsg.builder().userId(share.getUserId()).bonus(50).build();
+            rocketMQTemplate.sendMessageInTransaction(
+                "tx-add-bonus-group",
+                "add-bonus",
+                MessageBuilder
+                    .withPayload(userAddBonusMsg)
+                    .setHeader(RocketMQHeaders.TRANSACTION_ID, transactionId)
+                    .setHeader("share_id", id)
+                    .build(),
+                dto);
+        } else {
+            auditByIdInDB(id, dto);
+        }
 
         return share;
+    }
+
+    // 本地事务
+    @Transactional(rollbackFor = Exception.class)
+    public void auditByIdInDB(Integer id, ShareAuditDTO dto) {
+        Share share = Share.builder().id(id).auditStatus(dto.getAuditStatus().name()).reason(dto.getReason()).build();
+        shareMapper.updateByPrimaryKeySelective(share);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void auditByIdWithRocketMqLog(Integer id, ShareAuditDTO auditDTO, String transactionId) {
+        auditByIdInDB(id, auditDTO);
+        RocketmqTransactionLog rocketmqTransactionLog = RocketmqTransactionLog.builder().transactionId(transactionId).log("audit").build();
+        rocketmqTransactionLogMapper.insertSelective(rocketmqTransactionLog);
     }
 
     public static void main(String[] args) {

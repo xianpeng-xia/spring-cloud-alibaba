@@ -2,7 +2,10 @@ package com.example.content.domain.entity.share;
 
 import java.util.Date;
 import javax.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -10,6 +13,9 @@ import lombok.ToString;
 @Setter
 @ToString
 @Table(name = "share")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Share {
     @Id
     @GeneratedValue(generator = "JDBC")
