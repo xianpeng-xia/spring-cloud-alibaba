@@ -34,7 +34,7 @@ public class AddBonusTransactionListener implements RocketMQLocalTransactionList
     public RocketMQLocalTransactionState executeLocalTransaction(Message message, Object args) {
         MessageHeaders headers = message.getHeaders();
         String transactionId = (String) headers.get(RocketMQHeaders.TRANSACTION_ID);
-        Integer shareId = (Integer) headers.get("share_id");
+        Integer shareId = Integer.valueOf((String) headers.get("share_id"));
         try {
             shareService.auditByIdWithRocketMqLog(shareId, (ShareAuditDTO) args, transactionId);
             return RocketMQLocalTransactionState.COMMIT;
