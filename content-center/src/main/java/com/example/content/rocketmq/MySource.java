@@ -9,9 +9,9 @@ import org.springframework.messaging.MessageChannel;
  */
 public interface MySource {
 
-    String MY_SOURCE = "my-source";
+    String MY_OUTPUT = "my-output";
 
-    @Output(MY_SOURCE)
+    @Output(MY_OUTPUT)
     MessageChannel output();
 
 }

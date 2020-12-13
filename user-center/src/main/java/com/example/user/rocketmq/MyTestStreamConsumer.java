@@ -15,6 +15,6 @@ public class MyTestStreamConsumer {
 
     @StreamListener(MySink.MY_INPUT)
     public void receive(String messageBody) {
-        log.info("Get message {}", messageBody);
+        log.info("Get my message {}", messageBody);
     }
 }
