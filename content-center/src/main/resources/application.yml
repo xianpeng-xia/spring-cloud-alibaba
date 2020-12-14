@@ -35,12 +35,19 @@ spring:
       rocketmq:
         binder:
           name-server: 127.0.0.1:9876
+        bindings:
+          add-bonus-output:
+            producer:
+              transactional: true
+              group: tx-stream-add-bonus-group
       bindings:
         output:
           # 用来指定topic
           destination:  stream-test-topic
         my-output:
           destination:  stream-my-topic
+        add-bonus-output:
+          destination:  add-bonus-stream
 
   application:
     name: content-center

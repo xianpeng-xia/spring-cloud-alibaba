@@ -1,5 +1,6 @@
 package com.example.user;
 
+import com.example.user.rocketmq.AddBonusSink;
 import com.example.user.rocketmq.MySink;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,7 +12,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 @SpringBootApplication
 @MapperScan("com.example.user.dao")
 @EnableDiscoveryClient
-@EnableBinding({Sink.class, MySink.class})
+@EnableBinding({Sink.class, MySink.class, AddBonusSink.class})
 public class UserCenterApplication {
 
     public static void main(String[] args) {

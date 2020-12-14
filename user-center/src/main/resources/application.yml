@@ -33,6 +33,9 @@ spring:
           # 用来指定topic
           destination:  stream-my-topic
           group: my-group
+        add-bonus-input:
+          destination:  add-bonus-stream
+          group: add-bonus-stream-group
   application:
     name: user-center
 

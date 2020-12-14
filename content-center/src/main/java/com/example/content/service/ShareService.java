@@ -1,5 +1,6 @@
 package com.example.content.service;
 
+import com.alibaba.fastjson.JSON;
 import com.example.common.domain.dto.content.ShareAuditDTO;
 import com.example.common.domain.dto.content.ShareDTO;
 import com.example.common.domain.dto.message.UserAddBonusMsg;
@@ -10,6 +11,7 @@ import com.example.content.dao.transaction.RocketmqTransactionLogMapper;
 import com.example.content.domain.entity.share.Share;
 import com.example.content.domain.entity.transaction.RocketmqTransactionLog;
 import com.example.content.feign.client.UserCenterFeignClient;
+import com.example.content.rocketmq.AddBonusSource;
 import java.util.List;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -54,6 +57,9 @@ public class ShareService {
     @Autowired
     RocketmqTransactionLogMapper rocketmqTransactionLogMapper;
 
+    @Autowired
+    AddBonusSource addBonusSource;
+
     public ShareDTO findById(Integer id) {
         // 获取分享详情
         Share share = this.shareMapper.selectByPrimaryKey(id);
@@ -85,20 +91,37 @@ public class ShareService {
         if (dto.getAuditStatus().equals(AuditStatusEnum.PASS)) {
             String transactionId = UUID.randomUUID().toString();
             UserAddBonusMsg userAddBonusMsg = UserAddBonusMsg.builder().userId(share.getUserId()).bonus(50).build();
-            rocketMQTemplate.sendMessageInTransaction(
-                "tx-add-bonus-group",
-                "add-bonus",
-                MessageBuilder
-                    .withPayload(userAddBonusMsg)
-                    .setHeader(RocketMQHeaders.TRANSACTION_ID, transactionId)
-                    .setHeader("share_id", id)
-                    .build(),
-                dto);
+            // 使用stream发送消息
+            streamSend(transactionId, id, userAddBonusMsg, dto);
         } else {
             auditByIdInDB(id, dto);
         }
 
         return share;
+    }
+
+    private void streamSend(String transactionId, Integer id, UserAddBonusMsg userAddBonusMsg, ShareAuditDTO dto) {
+        Message<UserAddBonusMsg> message = MessageBuilder
+            .withPayload(userAddBonusMsg)
+            .setHeader(RocketMQHeaders.TRANSACTION_ID, transactionId)
+            .setHeader("share_id", id)
+            .setHeader("dto", JSON.toJSONString(dto))
+            .build();
+        boolean result = addBonusSource.output().send(message);
+        log.info("Send {}", result);
+    }
+
+    private void rocketMQTemplateSend(String transactionId, Integer id, UserAddBonusMsg userAddBonusMsg, ShareAuditDTO dto) {
+        Message<UserAddBonusMsg> message = MessageBuilder
+            .withPayload(userAddBonusMsg)
+            .setHeader(RocketMQHeaders.TRANSACTION_ID, transactionId)
+            .setHeader("share_id", id)
+            .build();
+        rocketMQTemplate.sendMessageInTransaction(
+            "tx-add-bonus-group",
+            "add-bonus",
+            message,
+            dto);
     }
 
     // 本地事务
