@@ -18,7 +18,9 @@ spring:
           uri: lb://user-center
           predicates:
             - TimeBetween=上午9:00,下午10:00
-
+          filters :
+            - PreLog=a,b
+            - AddRequestHeader=X-Request-Foo,Bar
 management:
   endpoints:
     web:
