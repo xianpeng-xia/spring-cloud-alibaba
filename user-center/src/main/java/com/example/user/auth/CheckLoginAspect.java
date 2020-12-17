@@ -34,7 +34,7 @@ public class CheckLoginAspect {
             // 校验token是否合法，不合法抛出异常
             Boolean isValid = jwtOperator.validateToken(token);
             if (!isValid) {
-                return new SecurityException("Token is illegal");
+                throw new SecurityException("Token is illegal");
             }
             // 如果检验成功，
             Claims claims = jwtOperator.getClaimsFromToken(token);
@@ -43,7 +43,7 @@ public class CheckLoginAspect {
             request.setAttribute("role", claims.get("role"));
             return point.proceed();
         } catch (Throwable throwable) {
-            return new SecurityException("Token is illegal");
+            throw new SecurityException("Token is illegal");
         }
     }
 }
