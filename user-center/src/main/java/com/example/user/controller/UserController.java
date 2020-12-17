@@ -1,5 +1,6 @@
 package com.example.user.controller;
 
+import com.example.common.auth.CheckLogin;
 import com.example.common.domain.dto.user.JwtTokenResp;
 import com.example.common.domain.dto.user.LoginRespDTO;
 import com.example.common.domain.dto.user.UserDTO;
@@ -37,6 +38,7 @@ public class UserController {
 
 
     @GetMapping("/{id}")
+    @CheckLogin
     public UserDTO findById(@PathVariable Integer id) {
         log.info("我被请求了...");
         return this.userService.findById(id);
