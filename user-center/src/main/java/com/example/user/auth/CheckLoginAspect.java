@@ -23,7 +23,7 @@ public class CheckLoginAspect {
     @Autowired
     JwtOperator jwtOperator;
 
-    @Around("@annotation(com.example.common.auth.CheckLogin)")
+    @Around("@annotation(com.example.common.annotation.CheckLogin)")
     public Object checkLogin(ProceedingJoinPoint point) {
         try {
             // 从header中获取token

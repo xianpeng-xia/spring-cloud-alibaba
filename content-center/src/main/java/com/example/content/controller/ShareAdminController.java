@@ -1,5 +1,6 @@
 package com.example.content.controller;
 
+import com.example.common.annotation.CheckAuthorization;
 import com.example.common.domain.dto.content.ShareAuditDTO;
 import com.example.content.domain.entity.share.Share;
 import com.example.content.service.ShareService;
@@ -22,6 +23,7 @@ public class ShareAdminController {
     ShareService shareService;
 
     @PutMapping("/audit/{id}")
+    @CheckAuthorization("admin")
     public Share auditById(@PathVariable Integer id, @RequestBody ShareAuditDTO shareAuditDTO) {
         return shareService.auditShare(id, shareAuditDTO);
     }

@@ -1,4 +1,4 @@
-package com.example.common.auth;
+package com.example.common.annotation;
 
 /**
  * @date 2020/12/17

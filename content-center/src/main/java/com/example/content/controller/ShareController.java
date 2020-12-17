@@ -1,6 +1,6 @@
 package com.example.content.controller;
 
-import com.example.common.auth.CheckLogin;
+import com.example.common.annotation.CheckLogin;
 import com.example.common.domain.dto.content.ShareDTO;
 import com.example.content.service.ShareService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -22,12 +22,11 @@ public class GlobalExceptionErrorHandler {
     public ResponseEntity<ErrorBody> error(SecurityException e) {
         log.warn("SecurityException ", e);
         ResponseEntity<ErrorBody> responseEntity = new ResponseEntity<ErrorBody>(
-            ErrorBody.builder().status(HttpStatus.UNAUTHORIZED.value()).body("Token illegal !!!").build(),
+            ErrorBody.builder().status(HttpStatus.UNAUTHORIZED.value()).body(e.getMessage()).build(),
             HttpStatus.UNAUTHORIZED
         );
         return responseEntity;
     }
-
 
 
 }
