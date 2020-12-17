@@ -1,6 +1,6 @@
 package com.example.user.controller;
 
-import com.example.common.annotation.CheckLogin;
+import com.example.annotation.CheckLogin;
 import com.example.common.domain.dto.user.JwtTokenResp;
 import com.example.common.domain.dto.user.LoginRespDTO;
 import com.example.common.domain.dto.user.UserDTO;

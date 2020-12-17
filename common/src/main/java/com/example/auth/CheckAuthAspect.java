@@ -1,14 +1,12 @@
-package com.example.content.auth;
+package com.example.auth;
 
-import com.example.common.annotation.CheckAuthorization;
-import com.example.content.jwt.JwtOperator;
+import com.example.annotation.CheckAuthorization;
+import com.example.auth.jwt.JwtOperator;
 import io.jsonwebtoken.Claims;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -29,13 +27,13 @@ public class CheckAuthAspect {
     @Autowired
     JwtOperator jwtOperator;
 
-    @Around("@annotation(com.example.common.annotation.CheckLogin)")
+    @Around("@annotation(com.example.annotation.CheckLogin)")
     public Object checkLogin(ProceedingJoinPoint point) throws Throwable {
         checkToken();
         return point.proceed();
     }
 
-    @Around("@annotation(com.example.common.annotation.CheckAuthorization)")
+    @Around("@annotation(com.example.annotation.CheckAuthorization)")
     public Object checkAuthorization(ProceedingJoinPoint point) throws Throwable {
         // 验证token是否合法
         try {

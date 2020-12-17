@@ -1,6 +1,6 @@
 package com.example.content.controller;
 
-import com.example.common.annotation.CheckAuthorization;
+import com.example.annotation.CheckAuthorization;
 import com.example.common.domain.dto.content.ShareAuditDTO;
 import com.example.content.domain.entity.share.Share;
 import com.example.content.service.ShareService;

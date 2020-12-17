@@ -1,6 +1,5 @@
-package com.example.user.jwt;
+package com.example.auth.jwt;
 
-import com.google.common.collect.Maps;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -14,7 +13,7 @@ import java.util.Map;
 import javax.crypto.SecretKey;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.binary.Base64;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -132,7 +131,7 @@ public class JwtOperator {
         jwtOperator.secret = "aaabbbcccdddeeefffggghhhiiijjjkkklllmmmnnnooopppqqqrrrsssttt";
 
         // 2.设置用户信息
-        HashMap<String, Object> objectObjectHashMap = Maps.newHashMap();
+        HashMap<String, Object> objectObjectHashMap = new HashMap<>();
         objectObjectHashMap.put("id", "1");
 
         // 测试1: 生成token
