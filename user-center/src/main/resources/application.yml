@@ -43,3 +43,8 @@ rocketmq:
   name-server: localhost:9876
   producer:
     group: test-group
+
+jwt:
+  secret: TYk2sTasdkng669_akgFG@
+  # 有效期，单位秒，默认2周
+  expire-time-in-second: 1209600
