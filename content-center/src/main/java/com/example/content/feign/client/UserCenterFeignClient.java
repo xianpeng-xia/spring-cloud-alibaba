@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  */
 @FeignClient(name = "user-center"
     // ,fallback = UserCenterFeignClientFallback.class
-    , fallbackFactory = UserCenterFeignClientFallbackFactory.class
+   // fallbackFactory = UserCenterFeignClientFallbackFactory.class
 )
 public interface UserCenterFeignClient {
 

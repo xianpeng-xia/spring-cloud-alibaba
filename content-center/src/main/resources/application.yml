@@ -72,7 +72,9 @@ feign:
     config:
       # 全局
       default:
-        loggerLevel: BASIC
+        loggerLevel: FULL
+        requestInterceptors:
+          - com.example.content.feign.client.interceptor.TokenRelayRequestInterceptor
       # 想要调用的微服务名称
       #user-center:
       #  loggerLevel: full
@@ -100,3 +102,8 @@ rocketmq:
   name-server: localhost:9876
   producer:
     group: test-group
+
+jwt:
+  secret: TYk2sTasdkng669_akgFG@
+  # 有效期，单位秒，默认2周
+  expire-time-in-second: 1209600

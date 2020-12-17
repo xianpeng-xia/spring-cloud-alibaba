@@ -1,5 +1,6 @@
 package com.example.content.controller;
 
+import com.example.common.auth.CheckLogin;
 import com.example.common.domain.dto.content.ShareDTO;
 import com.example.content.service.ShareService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ public class ShareController {
     ShareService shareService;
 
     @GetMapping("/{id}")
+    @CheckLogin
     public ShareDTO findById(@PathVariable Integer id) {
         return shareService.findById(id);
     }
