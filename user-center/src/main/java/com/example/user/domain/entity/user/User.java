@@ -2,7 +2,10 @@ package com.example.user.domain.entity.user;
 
 import java.util.Date;
 import javax.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -10,6 +13,9 @@ import lombok.ToString;
 @Setter
 @ToString
 @Table(name = "user")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -38,4 +44,5 @@ public class User {
     @Column(name = "update_time")
     private Date updateTime;
     private Integer bonus;
+    private String role;
 }

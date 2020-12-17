@@ -2,6 +2,7 @@ package com.example.user.service;
 
 import com.example.common.domain.dto.message.UserAddBonusMsg;
 import com.example.common.domain.dto.user.UserDTO;
+import com.example.common.domain.dto.user.UserLoginDTO;
 import com.example.user.dao.user.BonusEventLogMapper;
 import com.example.user.dao.user.UserMapper;
 import com.example.user.domain.entity.user.BonusEventLog;
@@ -32,6 +33,16 @@ public class UserService {
         UserDTO dto = new UserDTO();
         BeanUtils.copyProperties(user, dto);
         return dto;
+    }
+
+    public User login(UserLoginDTO loginDTO) {
+        User user = userMapper.selectOne(User.builder().email(loginDTO.getEmail()).build());
+        if (user == null) {
+            User newUser = User.builder().email(loginDTO.getEmail()).username(loginDTO.getUsername()).bonus(100).role("user").createTime(new Date()).updateTime(new Date()).build();
+            userMapper.insertSelective(newUser);
+            return newUser;
+        }
+        return user;
     }
 
     @Transactional(rollbackFor = Exception.class)
