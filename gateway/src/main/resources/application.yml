@@ -14,13 +14,14 @@ spring:
           # 让gateway通过服务发现组件找到其他的微服务
           enabled: true
       routes:
-        - id: after_route
+        - id: user_route
           uri: lb://user-center
           predicates:
-            - TimeBetween=上午9:00,下午10:00
-          filters :
-            - PreLog=a,b
-            - AddRequestHeader=X-Request-Foo,Bar
+            - Path=/user/**
+        - id: content_route
+          uri: lb://content-center
+          predicates:
+            - Path=/shares/**,/admin/**
 management:
   endpoints:
     web:
