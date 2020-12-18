@@ -54,7 +54,7 @@ spring:
 #ribbon
 user-center:
   ribbon:
-    NFLoadBalancerRuleClassName: com.example.content.configuration.NacosFinalRule
+    NFLoadBalancerRuleClassName: com.example.blog.content.configuration.NacosFinalRule
 
 ribbon:
   eager-load:
@@ -74,7 +74,7 @@ feign:
       default:
         loggerLevel: FULL
         requestInterceptors:
-          - com.example.content.feign.client.interceptor.TokenRelayRequestInterceptor
+          - com.example.blog.content.feign.client.interceptor.TokenRelayRequestInterceptor
       # 想要调用的微服务名称
       #user-center:
       #  loggerLevel: full
