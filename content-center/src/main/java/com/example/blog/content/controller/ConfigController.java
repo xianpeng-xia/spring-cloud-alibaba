@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RefreshScope
 public class ConfigController {
 
-    //@Value("${your.configuration}")
+    @Value("${your.configuration}")
     public String yourConfiguration;
 
     @GetMapping("/get")

@@ -18,7 +18,7 @@ public class MyRequestOriginParser implements RequestOriginParser {
         // 从请求参数中获取名为origin的参数 如果获取不到就抛出异常 建议放header中
         String origin = request.getParameter("origin");
         if (StringUtils.isEmpty(origin)) {
-            throw new IllegalArgumentException("origin must be specified");
+           // throw new IllegalArgumentException("origin must be specified");
         }
         return origin;
     }
