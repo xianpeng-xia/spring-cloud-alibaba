@@ -43,6 +43,7 @@ spring:
 
   zipkin:
     base-url: http://localhost:9441/
+    discovery-client-enabled: false
   sleuth:
     sampler:
       # 抽样率默认10%
