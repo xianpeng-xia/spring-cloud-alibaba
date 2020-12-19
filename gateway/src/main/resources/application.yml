@@ -4,6 +4,15 @@ server:
 spring:
   application:
     name: gateway
+
+  zipkin:
+    base-url: http://localhost:9441/
+    discovery-client-enabled: false
+  sleuth:
+    sampler:
+      # 抽样率默认10%
+      probability: 1.0
+
   cloud:
     nacos:
       discovery:
